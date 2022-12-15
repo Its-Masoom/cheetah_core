@@ -2,8 +2,8 @@ module LoadStore_Unit (
     input  logic [2:0]  funct3,
     input  logic [6:0]  instr_opcode,          
     input  logic [31:0] data_rd,       // From Data Mem in case of Load Instr 
-	input  logic [31:0] rdata2,        
-    input  logic [31:0] ALUResult, 
+	input  logic [31:0] rdata2M,        
+    input  logic [31:0] ALUResultM, 
     // input  logic [31:0] toLSU,   // Value obtained from instruction memory against toinstr_mem
     // input  logic [31:0] Addr,
     output logic        cs,wr, 
@@ -19,7 +19,7 @@ parameter HalfWord          = 3'b001;
 parameter Word              = 3'b010;
 parameter Byte_Unsigned     = 3'b100;
 parameter HalfWord_Unsigned = 3'b101;
-assign addr                 = ALUResult;
+assign addr                 = ALUResultM;
 // assign toinstr_mem          = addr;
 
 always_comb begin
@@ -97,20 +97,20 @@ always_comb begin
                     Byte :  begin
                         case (addr[1:0])
                         2'b00 : begin
-                            data_wr[7:0] = rdata2[7:0];begin
+                            data_wr[7:0] = rdata2M[7:0];begin
                             mask         = 4'b0001;
                             end
                         end 
                         2'b01: begin
-                            data_wr [15:8] = rdata2[7:0];
+                            data_wr [15:8] = rdata2M[7:0];
                             mask           = 4'b0010;
                         end
                         2'b10: begin
-                            data_wr[23:16] = rdata2 [7:0];
+                            data_wr[23:16] = rdata2M [7:0];
                             mask           = 4'b0100;
                         end
                         2'b11:begin
-                            data_wr[31:24] = rdata2[7:0];
+                            data_wr[31:24] = rdata2M[7:0];
                             mask           = 4'b1000;
                         end
                         default: begin
@@ -119,16 +119,16 @@ always_comb begin
                     end
                     HalfWord: begin
                         case(addr[1]) 
-                            1'b0 : begin data_wr [15:0]  = rdata2[15:0];
+                            1'b0 : begin data_wr [15:0]  = rdata2M[15:0];
                             mask                         = 4'b0011;
                             end
-                            1'b1 : begin data_wr [31:16] = rdata2 [15:0];
+                            1'b1 : begin data_wr [31:16] = rdata2M [15:0];
                             mask                         = 4'b1100;
                             end
                         endcase
                     end
                     Word: begin 
-                        data_wr = rdata2;
+                        data_wr = rdata2M;
                         mask 	= 4'b1111;
                     end 		
                 endcase

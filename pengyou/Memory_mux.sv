@@ -1,5 +1,5 @@
 module Memory_mux (
-    input logic  [31:0] toLSU,rdata,
+    input logic  [31:0] toLSU,rdataW,
     input logic [31:0] addr,
     output logic [31:0] mem_out
 );
@@ -11,7 +11,7 @@ always_comb begin
 
          mem_out=  toLSU; // Instruction Memory
     else
-        mem_out = rdata; // Data Memory   
+        mem_out = rdataW; // Data Memory   
 end
     
 endmodule

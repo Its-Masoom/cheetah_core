@@ -1,7 +1,7 @@
 module BranchCond (
     input logic [2:0]  funct3,
     input logic [6:0]  instr_opcode,
-    input logic [31:0] rdata1,rdata2,
+    input logic [31:0] SrcA_forward,SrcB_forward,
     output logic br_taken
 );
 
@@ -16,8 +16,8 @@ logic [32:0] cmp_output;
 logic [31:0] cmp_operand_1,cmp_operand_2;
 logic        cmp_not_zero,cmp_neg,cmp_overflow;
 
-assign cmp_operand_1 = rdata1;
-assign cmp_operand_2 = rdata2;
+assign cmp_operand_1 = SrcA_forward;
+assign cmp_operand_2 = SrcB_forward;
 assign cmp_output    = {1'b0, cmp_operand_1} -{1'b0, cmp_operand_2};
 assign cmp_not_zero  = |cmp_output [31:0];
 assign cmp_neg       = cmp_output [31];
