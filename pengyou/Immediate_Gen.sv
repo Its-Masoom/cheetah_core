@@ -1,11 +1,11 @@
 module immediate_gen (
-  input  logic [31:0] InstF,
+  input  logic [31:0] Inst,
   input  logic [2:0]  ImmSrcD,
   output logic [31:0] ImmExtD
 );
 
 logic [24:0] Imm;
-assign Imm = InstF [31:7];
+assign Imm =Inst [31:7];
 
   always_comb begin
     casex(ImmSrcD)

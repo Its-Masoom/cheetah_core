@@ -1,6 +1,6 @@
 module controller (
     input  logic        br_taken,
-    input  logic [31:0] InstF,
+    input  logic [31:0] Inst,
     output logic        PCsrc,reg_wr,sel_A,sel_B,
     output logic [1:0]  wb_sel,
     output logic [2:0]  ImmSrcD,funct3,
@@ -23,9 +23,9 @@ parameter [4:0] OR   = 5'b01000;
 parameter [4:0] AND  = 5'b01001;
 parameter [4:0] LUI  = 5'b01010;
 
-assign instr_opcode = InstF[6:0];
-assign funct7       = InstF[31:25];
-assign funct3       = InstF[14:12];
+assign instr_opcode = Inst[6:0];
+assign funct7       = Inst[31:25];
+assign funct3       = Inst[14:12];
 
 always_comb
 begin
@@ -159,6 +159,7 @@ begin
         end
 
         default: begin
+        
         end
 
     endcase

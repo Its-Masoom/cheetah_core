@@ -20,15 +20,15 @@ module ALU (
 
     5'b00101: ALUResult = SrcA ^ SrcB;                              //LOgical xor
 
-    5'b00110: ALUResult = SrcA >> SrcB;                             //Shift Right Logical
+    5'b00110: ALUResult = SrcA >> SrcB[4:0];                        //Shift Right Logical
 
-    5'b00111: ALUResult = SrcA >>> SrcB[4:0];                       //Shift Right Arithmetic
+    5'b00111: ALUResult = $signed(SrcA) >>> SrcB[4:0];              //Shift Right Arithmetic
 
     5'b01000: ALUResult = SrcA | SrcB;                              //Logical Or
 
     5'b01001: ALUResult = SrcA & SrcB;                              //Logical and
 
-    5'b01010: ALUResult = SrcB;                                      //Load Upper Immediate
+    5'b01010: ALUResult = SrcB;                                     //Load Upper Immediate
   
     default:  ALUResult = SrcA + SrcB;
     endcase

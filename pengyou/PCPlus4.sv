@@ -3,6 +3,6 @@ module PCPlus4 (
   output logic [31:0] PCF
 );
 
-  assign PCF = Addr + 32'd4;
+  assign PCF = Addr + 4;
   
 endmodule
