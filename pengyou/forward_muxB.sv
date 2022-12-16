@@ -1,6 +1,6 @@
 module forward_muxB(
+  input  logic [1:0]  For_B,
   input  logic [31:0] rdata2E, ALUResultM, wdata,
-  input  logic [1:0] For_B,
   output logic [31:0] SrcB_forward
 );
 always_comb begin

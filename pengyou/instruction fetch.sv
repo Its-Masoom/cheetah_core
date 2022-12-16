@@ -1,6 +1,6 @@
 module Instruction_Fetch (
-    input logic [31:0] InstD,
-    output logic [4:0] raddr1,raddr2,waddr
+    input  logic [31:0] InstD,
+    output logic [4:0]  raddr1, raddr2, waddr
 );
 
 always_comb begin

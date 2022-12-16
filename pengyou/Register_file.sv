@@ -1,8 +1,8 @@
 module Register_file (
-     input logic         clk,rst,reg_wr,
-     input logic  [4:0]  raddr1,raddr2,waddr,
-     input logic  [31:0] wdata,
-     output logic [31:0] rdata1,rdata2
+     input  logic        clk, rst, reg_wrW,
+     input  logic [4:0]  raddr1, raddr2, waddr,
+     input  logic [31:0] wdata,
+     output logic [31:0] rdata1, rdata2
 );
     logic [31:0] register_file[31:0];
 
@@ -15,7 +15,7 @@ module Register_file (
 //Synchronous Write
   integer i;
   always_ff @(negedge clk) begin
-    if (reg_wr && (|waddr)) begin
+    if (reg_wrW && (|waddr)) begin
         register_file[waddr] <= wdata;
     end
     //else if (rst) begin

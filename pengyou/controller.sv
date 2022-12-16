@@ -1,14 +1,12 @@
 module controller (
-    input  logic        br_taken,
-    input  logic [31:0] Inst,
-    output logic        PCsrc,reg_wr,sel_A,sel_B,
+    input  logic [31:0] InstD,
+    output logic        reg_wr, sel_A, sel_B,
     output logic [1:0]  wb_sel,
-    output logic [2:0]  ImmSrcD,funct3,
+    output logic [2:0]  ImmSrcD, funct3,
     output logic [4:0]  alu_op,
     output logic [6:0]  instr_opcode
 );
 
-logic       Btype;
 logic [6:0] funct7;
 
 parameter [4:0] ADD  = 5'b00000;
@@ -23,9 +21,9 @@ parameter [4:0] OR   = 5'b01000;
 parameter [4:0] AND  = 5'b01001;
 parameter [4:0] LUI  = 5'b01010;
 
-assign instr_opcode = Inst[6:0];
-assign funct7       = Inst[31:25];
-assign funct3       = Inst[14:12];
+assign instr_opcode = InstD[6:0];
+assign funct7       = InstD[31:25];
+assign funct3       = InstD[14:12];
 
 always_comb
 begin
@@ -38,7 +36,6 @@ begin
             sel_A    = 1'b1;
             sel_B    = 1'b0;
             wb_sel   = 2'b01;
-            Btype    = 1'b0;
             ImmSrcD  = 3'bxxx;
 
             case (funct3)
@@ -68,7 +65,6 @@ begin
         sel_A    = 1'b1;
         sel_B    = 1'b1;
         wb_sel   = 2'b01;
-        Btype    = 1'b0;
         ImmSrcD  = 3'b000;
         case (funct3)
             3'b000: alu_op = ADD;
@@ -92,7 +88,6 @@ begin
             sel_A   = 1'b1;
             sel_B   = 1'b1;
             wb_sel  = 2'b10;
-            Btype    = 1'b0;
             ImmSrcD = 3'b000;
             alu_op  = ADD;
             end
@@ -102,7 +97,6 @@ begin
             sel_A   = 1'b1;
             sel_B   = 1'b1;
             wb_sel  = 2'bx;
-            Btype   = 1'b0;
             ImmSrcD = 3'b001;
             alu_op  = ADD;
         end
@@ -112,7 +106,6 @@ begin
             sel_B   = 1'b1;
             sel_A   = 1'bx;
             wb_sel  = 2'b01;
-            Btype    = 1'b0;
             ImmSrcD = 3'b100;
             alu_op  = LUI;
         end
@@ -122,14 +115,12 @@ begin
             sel_B   = 1'b1;
             sel_A   = 1'b0; 
             wb_sel  = 2'b01;
-            Btype   = 1'b0;
             ImmSrcD = 3'b100;
             alu_op  = ADD;
             
         end
 
         7'b1100011: begin //B type 
-            Btype   = 1'b1;
             reg_wr  = 1'b0;
             sel_A   = 1'b0; 
             sel_B   = 1'b1; 
@@ -139,7 +130,6 @@ begin
         end
 
         7'b1101111: begin //JAL  
-            Btype   = 1'b1;
             reg_wr  = 1'b1;
             sel_A   = 1'b0; 
             sel_B   = 1'b1; 
@@ -149,7 +139,6 @@ begin
             end
 
         7'b1100111: begin //JALR 
-            Btype   = 1'b1;
             reg_wr  = 1'b1;
             sel_A   = 1'b1; 
             sel_B   = 1'b1; 
@@ -163,7 +152,6 @@ begin
         end
 
     endcase
-    PCsrc = Btype && br_taken;
 end
     
 endmodule

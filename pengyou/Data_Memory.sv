@@ -1,9 +1,9 @@
 module Data_Memory( 
-    input  logic clk,rst,
-    input  logic cs,wr,
-    input  logic [3:0] mask,
-    input  logic [31:0]  data_wr,
-    input logic [19:0] addr,
+    input  logic        clk, rst,
+    input  logic        cs, wr,
+    input  logic [3:0]  mask,
+    input  logic [31:0] data_wr,
+    input  logic [19:0] addr,
     // input logic [13:0] addr,
 
     output logic [31:0] data_rd

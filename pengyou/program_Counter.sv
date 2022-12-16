@@ -1,5 +1,5 @@
 module program_counter (
-	input  logic clk,rst,
+	input  logic        clk, rst,
 	input  logic [31:0] PC,
 	output logic [31:0] Addr
 );

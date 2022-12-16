@@ -1,6 +1,6 @@
 module forward_muxA(
+  input  logic [1:0]  For_A,
   input  logic [31:0] rdata1E, ALUResultM, wdata,
-  input  logic [1:0] For_A,
   output logic [31:0] SrcA_forward
 );
 always_comb begin

@@ -1,12 +1,12 @@
 module ALU (
-    input logic  [4:0]  alu_op,
-    input logic  [31:0] SrcA,SrcB,
+    input  logic [4:0]  alu_opE,
+    input  logic [31:0] SrcA, SrcB,
     output logic [31:0] ALUResult
 );
 
 
  always_comb begin
-    case(alu_op)
+    case(alu_opE)
     
     5'b00000: ALUResult = SrcA + SrcB ;                             //Addition
 

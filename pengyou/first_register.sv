@@ -1,5 +1,5 @@
 module first_register (
-    input               clk ,rst,Stall,Flush,
+    input               clk ,rst, Stall, Flush,
     input  logic [31:0] Addr, Inst,
     output logic [31:0] AddrD, InstD
 );

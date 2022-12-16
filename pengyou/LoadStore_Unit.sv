@@ -1,6 +1,6 @@
 module LoadStore_Unit (
-    input  logic [2:0]  funct3,
-    input  logic [6:0]  instr_opcode,          
+    input  logic [2:0]  funct3M,
+    input  logic [6:0]  instr_opcodeM,          
     input  logic [31:0] data_rd,       // From Data Mem in case of Load Instr 
 	input  logic [31:0] rdata2M,        
     input  logic [31:0] ALUResultM, 
@@ -24,7 +24,7 @@ assign addr                 = ALUResultM;
 
 always_comb begin
     wr = 1;
-	case (instr_opcode)
+	case (instr_opcodeM)
 	7'b0000011: begin 
 		wr = 1;
 	    cs = 0;  //load
@@ -44,9 +44,9 @@ logic [31:0] rdata_word;
         rdata_byte  = '0;
         rdata_hword = '0;
         rdata_word  = '0;
-        case(instr_opcode) 
+        case(instr_opcodeM) 
             7'b0000011: begin //Load
-                case (funct3)
+                case (funct3M)
                     Byte, Byte_Unsigned: case( addr[1:0] )
                             2'b00 : rdata_byte = data_rd [7:0];
                             2'b01 : rdata_byte = data_rd [15:8];     
@@ -70,7 +70,7 @@ logic [31:0] rdata_word;
         //     rdata = toLSU;
         //     // mask 	= 4'b1111;
         // end else begin
-        case (funct3)
+        case (funct3M)
             Byte              : rdata = {{24{rdata_byte[7]}},   rdata_byte}; 
             Byte_Unsigned     : rdata = {24'b0,                 rdata_byte};
             // Byte_Unsigned     : rdata = {24{0},                 rdata_byte};
@@ -91,9 +91,9 @@ always_comb begin
     // else begin
         data_wr = '0;
         mask    = '0;
-        case (instr_opcode)
+        case (instr_opcodeM)
         7'b0100011 : begin //store  
-                case (funct3)
+                case (funct3M)
                     Byte :  begin
                         case (addr[1:0])
                         2'b00 : begin

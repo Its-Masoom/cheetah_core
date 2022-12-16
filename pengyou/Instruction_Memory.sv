@@ -1,5 +1,5 @@
 module Instruction_Memory (
-    input  logic  [31:0] Addr,  // toinstr_mem is ALUResult from LSU
+    input  logic [31:0] Addr,  // toinstr_mem is ALUResult from LSU
     input  logic [31:0] addr,
     output logic [31:0] Inst, toLSU        // toLSU is the value against toinstr_mem address
 );
