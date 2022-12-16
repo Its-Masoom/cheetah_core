@@ -2,13 +2,13 @@ module third_register (
     input  logic        clk ,rst, reg_wrE,
     input  logic [1:0]  wb_selE,
     input  logic [2:0]  funct3E,
-    input  logic [4:0]  waddrE,
+    input  logic [4:0]  waddrE, 
     input  logic [6:0]  instr_opcodeE,
     input  logic [31:0] AddrE, ALUResult, rdata2E,
     output logic        reg_wrM,
     output logic [1:0]  wb_selM,
     output logic [2:0]  funct3M,
-    output logic [4:0]  waddrM,
+    output logic [4:0]  waddrM, 
     output logic [6:0]  instr_opcodeM,
     output logic [31:0] AddrM, ALUResultM, rdata2M
 );

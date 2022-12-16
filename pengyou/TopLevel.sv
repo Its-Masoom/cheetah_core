@@ -1,11 +1,11 @@
 module TopLevel (input logic clk,rst);
 
-    logic        reg_wr, sel_A, sel_B, cs, wr, br_taken, Stall; 
-    logic        Flush, reg_wrE, reg_wrM, reg_wrW, sel_AE, sel_BE;
+    logic        reg_wr, sel_A, sel_B, cs, wr, br_taken, StallF, StallD; 
+    logic        FlushD, FlushE, reg_wrE, reg_wrM, reg_wrW, sel_AE, sel_BE;
     logic [1:0]  wb_sel, For_A, For_B, wb_selE, wb_selM, wb_selW;
     logic [2:0]  ImmSrcD, funct3, funct3E, funct3M;
     logic [3:0]  mask;
-    logic [4:0]  raddr1, raddr2, waddr, waddrE, waddrM, waddrW, alu_op, alu_opE;
+    logic [4:0]  raddr1, raddr2, waddr, waddrE, waddrM, waddrW, alu_op, alu_opE, raddr1E, raddr2E;
     logic [6:0]  instr_opcode, instr_opcodeE, instr_opcodeM;
     logic [31:0] Addr, PC, Inst, PCF, wdata, rdata1, rdata2, ImmExtD, SrcA, SrcB, ALUResult, rdata, data_rd, addr, data_wr, toinstr_mem, toLSU, mem_out;
     logic [31:0] AddrD, InstD, AddrE, rdata1E, rdata2E, ImmExtE, AddrM, ALUResultM, rdata2M, AddrW, ALUResultW, rdataW, SrcA_forward, SrcB_forward;
@@ -21,7 +21,8 @@ program_counter ProgCounter(
     .clk(clk),
     .rst(rst),
     .PC(PC),
-    .Addr(Addr)
+    .Addr(Addr),
+    .StallF(StallF)
     );
 
 Instruction_Memory InstMem(
@@ -145,8 +146,8 @@ Memory_mux Memory_mux(
 first_register  First_Register(
     .clk(clk),
     .rst(rst),
-    .Stall(Stall),
-    .Flush(Flush),
+    .StallD(StallD),
+    .FlushD(FlushD),
     .Addr(Addr),
     .AddrD(AddrD),
     .Inst(Inst),
@@ -156,7 +157,7 @@ first_register  First_Register(
 second_register Second_Register(
     .clk(clk),
     .rst(rst),
-    .Flush(Flush),
+    .FlushE(FlushE),
     .AddrD(AddrD),
     .AddrE(AddrE),
     .waddr(waddr),
@@ -180,7 +181,11 @@ second_register Second_Register(
     .alu_op(alu_op),
     .alu_opE(alu_opE),
     .instr_opcode(instr_opcode),
-    .instr_opcodeE(instr_opcodeE)
+    .instr_opcodeE(instr_opcodeE),
+    .raddr1(raddr1),
+    .raddr2(raddr2),
+    .raddr1E(raddr1E),
+    .raddr2E(raddr2E)
     );
 
 third_register  Third_Register(
@@ -240,6 +245,26 @@ forward_muxB Forward_MuxB(
     .wdata(wdata), 
     .For_B(For_B), 
     .SrcB_forward(SrcB_forward)
+    );
+
+Hazard_Unit Hazard_Unit(
+    .reg_wrM(reg_wrM), 
+    .reg_wrW(reg_wrW), 
+    .br_taken(br_taken),         
+    .wb_selE(wb_selE),                
+    .raddr1(raddr1), 
+    .raddr2(raddr2), 
+    .raddr1E(raddr1E), 
+    .raddr2E(raddr2E), 
+    .waddrE(waddrE), 
+    .waddrM(waddrM), 
+    .waddrW(waddrW), 
+    .StallF(StallF), 
+    .StallD(StallD), 
+    .FlushE(FlushE),
+    .FlushD(FlushD),
+    .For_A(For_A),
+    .For_B(For_B)   
     );
 
 endmodule

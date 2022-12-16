@@ -1,5 +1,5 @@
 module first_register (
-    input               clk ,rst, Stall, Flush,
+    input               clk ,rst, StallD, FlushD,
     input  logic [31:0] Addr, Inst,
     output logic [31:0] AddrD, InstD
 );
@@ -9,11 +9,11 @@ module first_register (
             AddrD <= 32'b0;
             InstD <= 32'b0;
         end
-        else if(Stall) begin
+        else if(StallD) begin
             AddrD <= AddrD;
             InstD <= InstD;
         end
-        else if (Flush) begin
+        else if (FlushD) begin
             InstD <= 32'h00000013;
         end
         else begin

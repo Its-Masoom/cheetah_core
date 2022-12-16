@@ -1,14 +1,14 @@
 module second_register (
-    input               clk ,rst, Flush, reg_wr, sel_A, sel_B,
+    input               clk ,rst, FlushE, reg_wr, sel_A, sel_B,
     input  logic [1:0]  wb_sel,
     input  logic [2:0]  funct3,
-    input  logic [4:0]  waddr, alu_op,
+    input  logic [4:0]  waddr, alu_op, raddr1, raddr2, 
     input  logic [6:0]  instr_opcode,
     input  logic [31:0] AddrD, rdata1, rdata2, ImmExtD,
     output logic        reg_wrE, sel_AE, sel_BE,
     output logic [1:0]  wb_selE,
     output logic [2:0]  funct3E,
-    output logic [4:0]  waddrE, alu_opE,
+    output logic [4:0]  waddrE, alu_opE, raddr1E, raddr2E, 
     output logic [6:0]  instr_opcodeE,
     output logic [31:0] AddrE, rdata1E, rdata2E, ImmExtE
 
@@ -28,6 +28,8 @@ module second_register (
             funct3E       <= 3'b0;
             alu_opE       <= 5'b0;
             instr_opcodeE <= 7'b0;
+            raddr1E       <= 5'b0;
+            raddr2E       <= 5'b0;
 
         end
         // else if(Stall) begin
@@ -37,7 +39,7 @@ module second_register (
         //     rdata2E <= rdata2E;
         //     ImmExtE <= ImmExtE;
         // end
-        else if (Flush) begin
+        else if (FlushE) begin
             waddrE        <= 32'h00000013;
             rdata1E       <= 32'h00000013;
             rdata2E       <= 32'h00000013;
@@ -49,6 +51,8 @@ module second_register (
             funct3E       <= 32'h00000013;
             alu_opE       <= 32'h00000013;
             instr_opcodeE <= 32'h00000013;
+            raddr1E       <= 32'h00000013;
+            raddr2E       <= 32'h00000013;
         end
         else begin
             AddrE         <= AddrD;
@@ -62,7 +66,9 @@ module second_register (
             wb_selE       <= wb_sel; 
             funct3E       <= funct3;
             alu_opE       <= alu_op; 
-            instr_opcodeE <= instr_opcode;       
+            instr_opcodeE <= instr_opcode;  
+            raddr1E       <= raddr1;
+            raddr2E       <= raddr2;     
 
         end
     end

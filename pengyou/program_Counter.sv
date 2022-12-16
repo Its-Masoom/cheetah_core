@@ -1,5 +1,5 @@
 module program_counter (
-	input  logic        clk, rst,
+	input  logic        clk, rst, StallF,
 	input  logic [31:0] PC,
 	output logic [31:0] Addr
 );
@@ -7,7 +7,7 @@ module program_counter (
 	always_ff @(posedge clk or posedge rst) begin
 	 if (rst) 
 	   		Addr <= 32'd0;
-	 else 
+	 else if (~StallF)
 			Addr <= PC;
 	end	
 endmodule

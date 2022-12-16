@@ -1,5 +1,3 @@
-
-
 module TopLevel_tb ();
 logic clk,rst;
 
@@ -29,7 +27,7 @@ always_ff @(posedge clk)
 
 begin
     
-if((~TOPLevel.Dmem.wr)&(TOPLevel.ALUResult == 32'h00000F00))
+if((~TOPLevel.Dmem.wr)&(TOPLevel.ALUResultM == 32'h00000F00))
 // if((~TOPLevel.Dmem.wr)&(TOPLevel.ALUResult == 32'hF0000000))
 
 // if(~TOPLevel.Dmem.wr)
@@ -37,7 +35,7 @@ begin
     $fwrite(f,"%h\n", TOPLevel.data_wr);
 end
 
-if((~TOPLevel.Dmem.wr)&(TOPLevel.ALUResult == 32'hcafebeef))
+if((~TOPLevel.Dmem.wr)&(TOPLevel.ALUResultM == 32'hcafebeef))
 begin
     $finish;
 end

@@ -5,9 +5,9 @@ module forward_muxA(
 );
 always_comb begin
     case (For_A)
-        2'b00 : SrcA_forward = ALUResultM;
-        2'b01 : SrcA_forward = rdata1E;
-        2'b10 : SrcA_forward = wdata;
+        2'b00 : SrcA_forward = rdata1E;
+        2'b01 : SrcA_forward = wdata;
+        2'b10 : SrcA_forward = ALUResultM;
     endcase
 end
 

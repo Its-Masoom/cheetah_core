@@ -1,48 +1,40 @@
-module Hazard_Unit (
-    input  logic       reg_wrMW,PCsrc,valid,         //instead of br_taken,I have used PCSrc here
-    input  logic [1:0] wb_selMW,                //used to check the stalling condition
-    input  logic [4:0] raddr1,raddr2,waddr_MW, //instead of giving InstF as an input,I have used raddr1 and raddr2 directly
-    output logic       For_A, For_B,Stall,Stall_MW,Flush
-    
+module Hazard_Unit(
+  input  logic       reg_wrM, reg_wrW, br_taken,         
+  input  logic [1:0] wb_selE,                
+  input  logic [4:0] raddr1, raddr2, raddr1E, raddr2E, waddrE, waddrM, waddrW, 
+  output logic       StallF, StallD, FlushE, FlushD,
+  output logic [1:0] For_A, For_B   
 );
 
-// Check the validity of the source operands from EXE stage
-  logic rs1_valid;
-  logic rs2_valid;
-  assign rs1_valid = |raddr1;
-  assign rs2_valid = |raddr2;
-
-// Hazard detection for forwarding 
-  always_comb begin
-    if (((raddr1 == waddr_MW) & (reg_wrMW)) & (rs1_valid)  & (valid==0)) begin
-      For_A = 1'b0;
-    end
-    else begin
-      For_A = 1'b1;
-    end
-
-  end
-
-  always_comb begin
-    if (((raddr2 == waddr_MW) & (reg_wrMW)) & (rs2_valid) & ( valid == 0) ) begin
-      For_B = 1'b0;
-    end
-    else begin
-      For_B = 1'b1;
-    end
-
-  end
-  
-// Hazard detection for Stalling
   logic lwStall;
-  assign  lwStall  = ( wb_selMW[1] & (( raddr1 == waddr_MW ) | ( raddr2 == waddr_MW )) & ( valid == 0) & (reg_wrMW));
-  assign  Stall    = lwStall;
-  assign  Stall_MW = lwStall;  
 
-//Flush When a branch is taken or a load initroduces a bubble
-always_comb begin
-   if (PCsrc)
-      Flush  = 1'b1;
-end
+  always_comb begin 
+    if (((raddr1E == waddrM) && reg_wrM) && (raddr1E != 0)) begin
+      For_A <= 2'b10;
+    end else if (((raddr1E == waddrW) && reg_wrW) && (raddr1E != 0)) begin
+      For_A <= 2'b01;
+    end else begin
+      For_A <= 2'b00;
+    end
+  end
+
+  always_comb begin 
+    if (((raddr2E == waddrM) && reg_wrM) && (raddr2E != 0)) begin
+      For_B <= 2'b10;
+    end else if (((raddr2E == waddrW) && reg_wrW) && (raddr2E != 0)) begin
+      For_B <= 2'b01;
+    end else begin
+      For_B <= 2'b00;
+    end
+  end
+
+  always_comb begin  //Stall when a load hazard occur
+    lwStall <= (wb_selE[1] & ((raddr1 == waddrE) | (raddr2 == waddrE)));
+    StallD  <= lwStall;
+    StallF  <= lwStall;
+    //Flush When a branch is taken or a load initroduces a bubble
+    FlushE  <= lwStall | br_taken;
+    FlushD  <= br_taken;
+  end
 
 endmodule
