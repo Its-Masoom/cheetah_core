@@ -1,6 +1,6 @@
 module BranchCond (
     input  logic [2:0]  funct3E,
-    input  logic [6:0]  instr_opcode,
+    input  logic [6:0]  instr_opcodeE,
     input  logic [31:0] SrcA_forward, SrcB_forward,
     output logic        br_taken
 );
@@ -24,7 +24,8 @@ assign cmp_neg       = cmp_output [31];
 assign cmp_overflow  = (cmp_neg & ~cmp_operand_1[31] & cmp_operand_2 [31] ) | ( ~cmp_neg & cmp_operand_1[31] & ~cmp_operand_2[31] );
 
 always_comb begin
-    case (instr_opcode)
+    br_taken <= 1'b0;
+    case (instr_opcodeE)
         7'b1100011 :begin  // B Type 
             case(funct3E) 
                 BEQ    : br_taken = ~cmp_not_zero;

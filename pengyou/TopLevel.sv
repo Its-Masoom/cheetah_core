@@ -8,7 +8,7 @@ module TopLevel (input logic clk,rst);
     logic [4:0]  raddr1, raddr2, waddr, waddrE, waddrM, waddrW, alu_op, alu_opE, raddr1E, raddr2E;
     logic [6:0]  instr_opcode, instr_opcodeE, instr_opcodeM;
     logic [31:0] Addr, PC, Inst, PCF, wdata, rdata1, rdata2, ImmExtD, SrcA, SrcB, ALUResult, rdata, data_rd, addr, data_wr, toinstr_mem, toLSU, mem_out;
-    logic [31:0] AddrD, InstD, AddrE, rdata1E, rdata2E, ImmExtE, AddrM, ALUResultM, rdata2M, AddrW, ALUResultW, rdataW, SrcA_forward, SrcB_forward;
+    logic [31:0] AddrD, InstD, AddrE, rdata1E, rdata2E, ImmExtE, AddrM, ALUResultM, rdata2M, AddrW, ALUResultW, rdataW, SrcA_forward, SrcB_forward, AddrWplus4;
 
 Mux_PC MuxPC(
     .PCF(PCF),
@@ -131,8 +131,8 @@ MuxResult Muxresult(
 BranchCond Branchcond(
     .funct3E(funct3E),
     .instr_opcodeE(instr_opcodeE),
-    .rdata1E(rdata1E),
-    .rdata2E(rdata2E),
+    .SrcA_forward(SrcA_forward),
+    .SrcB_forward(SrcB_forward),
     .br_taken(br_taken)
     );
 
